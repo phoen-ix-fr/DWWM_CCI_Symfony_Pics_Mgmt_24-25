@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="h-100">
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
@@ -11,7 +11,16 @@
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
-    <body>
-        {% block body %}{% endblock %}
+    <body class="d-flex flex-column h-100">
+
+        {% include('includes/nav.inc.twig') %}
+
+        <main class="flex-shrink-0">
+            <div class="container">
+            {% block body %}{% endblock %}
+            </div>
+        </main>
+
+        {% include('includes/footer.inc.twig') %}
     </body>
 </html>
