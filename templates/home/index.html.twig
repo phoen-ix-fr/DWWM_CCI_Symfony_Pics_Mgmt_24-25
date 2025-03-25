@@ -1,8 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Accueil | Mes photos!{% endblock %}
 
 {% block body %}
+
+<div class="card quote-of-the-day">
+  <div class="card-header">
+    Citation du jour / Quote of the day
+  </div>
+  <div class="card-body">
+    {{ quote }}
+  </div>
+</div>
 
 <h1>Mes évènements</h1>
 
