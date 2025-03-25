@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une photo{% endblock %}
+
+{% block body %}
+<h1>Ajouter une photo</h1>
+<a href="{{ path('app_picture') }}">Retourner à la liste</a>
+
+{{ dump(picture) }}
+{% endblock %}
