@@ -7,8 +7,23 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+/**
+ * Contrôleur de la page du tableau de bord
+ */
 final class DashboardController extends AbstractController
 {
+    /**
+     * Page de tableau de bord
+     * Cette page contiendra les X dernières photos et les Y derniers évènements
+     * liés à l'utilisateur qui sera in-fine connecté
+     * 
+     * @route dashboard
+     * @name app_dashboard
+     * 
+     * @param Request $request (dépendance) Objet contenant la requête envoyé par le navigateur ($_POST/$_GET)
+     * 
+     * @return Response Réponse HTTP renvoyée au navigateur
+     */
     #[Route('/dashboard', name: 'app_dashboard')]
     public function index(Request $request): Response
     {

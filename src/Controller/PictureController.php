@@ -12,8 +12,22 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+/**
+ * Contrôleur de gestion des photos
+ */
 final class PictureController extends AbstractController
 {
+    /**
+     * Page d'affichage de la liste complète des photos en base
+     * 
+     * @route picture/
+     * @name app_picture
+     * @methods GET
+     * 
+     * @param PictureRepository $pictureRepository (Service) Repository permettant l'accès aux données en base
+     * 
+     * @return Response Réponse HTTP renvoyée au navigateur comportant la liste des photos
+     */   
     #[Route('/picture', name: 'app_picture')]
     public function index(PictureRepository $pictureRepository): Response
     {
@@ -25,6 +39,17 @@ final class PictureController extends AbstractController
         ]);
     }
 
+    /**
+     * Page de création d'une nouvelle photo
+     * 
+     * @route picture/create
+     * @name app_picture_create
+     * 
+     * @param EntityManagerInterface $entityManager (dépendance) Gestionnaire d'entités
+     * @param Request $request (dépendance) Objet contenant la requête envoyé par le navigateur ($_POST/$_GET)
+     * 
+     * @return Response Réponse HTTP renvoyée au navigateur comportant le formulaire de création
+     */
     #[Route('/picture/create', name: 'app_picture_create')]
     public function create(EntityManagerInterface $entityManager, 
         Request $request): Response
@@ -51,9 +76,8 @@ final class PictureController extends AbstractController
         }
 
         return $this->render('picture/create.html.twig', [
-            'formCreate' => $formPictureCreate,
-            'request'   => $request,
-            'picture' => $picture
+            'formCreate'    => $formPictureCreate,
+            'picture'       => $picture
         ]);
     }
 }
