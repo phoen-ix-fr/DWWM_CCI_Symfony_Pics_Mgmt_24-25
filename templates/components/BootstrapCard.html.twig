@@ -1,5 +1,10 @@
 <div class="card" style="width: 18rem;">
-  <img class="card-img-top" src="{{imgSrc}}" alt="Card image cap">
+  {% if imgSrc %}    
+  <div class="embed-responsive embed-responsive-16by9">
+      <img src={{ imgSrc }} class="card-img-top embed-responsive-item">
+  </div>
+  {% endif %}
+
   <div class="card-body">
     <h5 class="card-title">{{ title }}</h5>
     {% block content %}{% endblock %}
