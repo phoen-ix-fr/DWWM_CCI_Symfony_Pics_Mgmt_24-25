@@ -6,6 +6,10 @@ use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+/**
+ * Service permettant la génération (récupération depuis une API) d'une citation
+ * La citation est aléatoire
+ */
 final class QuoteGenerator
 {
     public function __construct(
@@ -16,6 +20,12 @@ final class QuoteGenerator
         
     }
 
+    /**
+     * Retourne une citation sous la forme d'une chaîne de caractères
+     * La citation est récupérée depuis le webservice (API) : https://zenquotes.io
+     * 
+     * @return string La citation récupérée, ou à défaut une citation fixe en cas de soucis de communication avec l'API
+     */
     public function getRandomQuote(): string
     {
         // Ne pas oublier le try-catch car on requête une ressource extérieur
