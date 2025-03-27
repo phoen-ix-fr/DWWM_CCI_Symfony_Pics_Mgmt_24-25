@@ -9,6 +9,7 @@ final class BootstrapButton
 {
     public string $text;            //< Texte qui sera affiché dans le bouton
     public string $strType = "";    //< Correspondra à la classe CSS de notre bouton
+    public string $path;            //< Chemin du lien
 
     /**
      * Cette fonction est appelée lors du "montage" de notre composant sur notre vue TWIG

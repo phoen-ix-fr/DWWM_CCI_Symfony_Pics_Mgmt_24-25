@@ -4,5 +4,27 @@
 
 {% block body %}
 <h1>Liste de mes photos</h1>
+
+<div class="my-2">
+<twig:BootstrapButton type="success" text="Ajouter une photo" path="{{ path('app_picture_create') }}" />
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  {% for picture in pictures %}
+  <div class="col mb-4">
+    <twig:BootstrapCard
+      title="{{ picture.description }}"
+      imgSrc="{{ picture.filename }}"
+      btnLink=""
+      btnLabel="Détails"
+    >
+
+    </twig:BootstrapCard>
+  </div>
+  {% else %}
+    <p>Aucune photo n'a été trouvée</p>
+  {% endfor %}
+</div>
+
 {{ dump(pictures) }}
 {% endblock %}
