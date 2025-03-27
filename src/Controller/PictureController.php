@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use DateTime;
 use App\Entity\Picture;
+use App\Form\PictureType;
 use App\Repository\PictureRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,23 +26,33 @@ final class PictureController extends AbstractController
     }
 
     #[Route('/picture/create', name: 'app_picture_create')]
-    public function create(EntityManagerInterface $entityManager): Response
+    public function create(EntityManagerInterface $entityManager, 
+        Request $request): Response
     {
         // Création d'un nouvel objet
         $picture = new Picture();
 
-        // Définition des différents attributs de l'objet
-        $picture->setDescription("Photo des vacances")
-            ->setDate(new DateTime())
-            ->setFilename("fichier.img");
+        // Création du formulaire pour l'affichage
+        // @param PictureType : correspond à la classe du formulaire
+        // @param $picture : l'objet qui sera remplit par le formulaire
+        $formPictureCreate = $this->createForm(PictureType::class, $picture);
 
-        // Prépare les données à être sauvegardées en base
-        $entityManager->persist($picture);
+        // On dit au formulaire de récupérer les données de la requête ($_POST)
+        $formPictureCreate->handleRequest($request);
 
-        // Enregistre les données en base, créer l'ID unique
-        $entityManager->flush();
+        // On vérifie que le formulaire a été soumis et que les données sont valides
+        if($formPictureCreate->isSubmitted() && $formPictureCreate->isValid())
+        {
+            // Prépare les données à être sauvegardées en base
+            $entityManager->persist($picture);
+    
+            // Enregistre les données en base, créer l'ID unique
+            $entityManager->flush();
+        }
 
         return $this->render('picture/create.html.twig', [
+            'formCreate' => $formPictureCreate,
+            'request'   => $request,
             'picture' => $picture
         ]);
     }
