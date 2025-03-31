@@ -14,3 +14,7 @@ footer
     height: 20vh;
     object-fit: cover
 }
+
+.picture-img {
+    max-width: 250px;
+}

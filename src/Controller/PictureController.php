@@ -80,4 +80,22 @@ final class PictureController extends AbstractController
             'picture'       => $picture
         ]);
     }
+
+    /**
+     * Page  d'affichage des détails d'une photo
+     * 
+     * @route picture/{id}
+     * @name app_picture_show
+     * 
+     * @param Picture $picture Entité Picture correspondante à l'ID transmise dans l'URL
+     *
+     * @return Response Réponse HTTP renvoyée au navigateur avec les détails de la photo
+     */
+    #[Route('/picture/{id<\d+>}', name: 'app_picture_show', methods: ['GET'])]
+    public function show(Picture $picture): Response
+    {
+        return $this->render('picture/show.html.twig', [
+            'picture'       => $picture
+        ]);
+    }
 }

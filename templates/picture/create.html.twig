@@ -4,7 +4,7 @@
 
 {% block body %}
 <h1>Ajouter une photo</h1>
-<a href="{{ path('app_picture') }}">Retourner à la liste</a>
+<twig:BootstrapButton type="primary" path="{{ path('app_picture') }}" label="Retourner à la liste" />
 
 {{ form(formCreate) }}
 

@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la photo{% endblock %}
+
+{% block body %}
+<h1>Détails photo ({{ picture.id }})</h1>
+<twig:BootstrapButton type="primary" path="{{ path('app_picture') }}" text="Retourner à la liste" />
+
+<div>
+    <img class="picture-img" src="{{ picture.filename }}" />
+</div>
+
+<div>
+    <h3>Date: {{ picture.date|date('d/m/Y') }}</h3>
+
+    <h3>Description</h3>
+    <p>{{ picture.description }}</p>
+</div>
+
+{{ dump(picture) }}
+{% endblock %}
