@@ -111,7 +111,7 @@ final class PictureController extends AbstractController
      *
      * @return Response Réponse HTTP renvoyée au navigateur avec les détails de la photo
      */
-    #[Route('/picture/edit/{id<\d+>}', name: 'app_picture_edit')]
+    #[Route('/picture/edit/{id<\d+>}', name: 'app_picture_edit', methods: ['GET', 'POST'])]
     public function edit(Picture $picture, Request $request, EntityManagerInterface $entityManager): Response
     {
         // Création du formulaire pour l'affichage
@@ -140,5 +140,48 @@ final class PictureController extends AbstractController
             'picture'       => $picture,
             'formEdit'      => $formPictureEdit
         ]);
+    }
+
+    /**
+     * Route de suppression d'une photo
+     * 
+     * @route picture/delete/{id}
+     * @name app_picture_delete
+     * 
+     * @param Picture $picture Entité Picture correspondante à l'ID transmise dans l'URL
+     * @param EntityManagerInterface $entityManager (dépendance) Gestionnaire d'entités
+     *
+     * @return Response Réponse HTTP renvoyée au navigateur
+     */
+    #[Route('/picture/delete/{id<\d+>}', name: 'app_picture_delete')]
+    public function delete(Picture $picture, EntityManagerInterface $entityManager): Response
+    {
+        try {
+
+            // Prépare l'objet à la suppression
+            $entityManager->remove($picture);
+
+            // On lance la suppression en base
+            $entityManager->flush();
+
+            // Si tout s'est bien passé, je redirige vers la liste
+            $this->addFlash(
+                'success',
+                "La suppression a été effectuée"
+            );
+
+            return $this->redirectToRoute('app_picture');
+        }
+        catch(\Exception $exc) {
+
+            // Je prépare un flash qui s'affichera à l'écran avec le message d'erreur de l'exception
+            $this->addFlash(
+                'error',
+                $exc->getMessage()
+            );
+
+            // Je redirige vers la page de la photo
+            return $this->redirectToRoute('app_picture_show', ['id' => $picture->getId()], 304);
+        }
     }
 }

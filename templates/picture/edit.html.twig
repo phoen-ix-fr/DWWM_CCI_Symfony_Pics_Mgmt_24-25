@@ -8,5 +8,8 @@
 
 {{ form(formEdit) }}
 
+
+<twig:BootstrapButton type="danger" path="{{ path('app_picture_delete', { id: picture.id }) }}" text="Supprimer" />
+
 {{ dump(picture) }}
 {% endblock %}
