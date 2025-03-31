@@ -4,12 +4,14 @@
 
 {% block body %}
 <h1>Modifier une photo ({{ picture.id }}) </h1>
-<twig:BootstrapButton type="primary" path="{{ path('app_picture') }}" text="Retourner à la liste" />
+<twig:BootstrapButton type="primary" isOutlined 
+    path="{{ path('app_picture') }}" 
+    text="Retourner à la liste" />
 
 {{ form(formEdit) }}
 
+<twig:BootstrapButton type="danger" 
+    path="{{ path('app_picture_delete', { id: picture.id }) }}" 
+    text="Supprimer" />
 
-<twig:BootstrapButton type="danger" path="{{ path('app_picture_delete', { id: picture.id }) }}" text="Supprimer" />
-
-{{ dump(picture) }}
 {% endblock %}
