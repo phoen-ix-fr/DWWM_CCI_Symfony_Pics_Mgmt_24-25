@@ -73,6 +73,8 @@ final class EventController extends AbstractController
                 'success',
                 "L'évènement a été créé avec succès"
             );
+
+            return $this->redirectToRoute('app_event');
         }
 
         return $this->render('event/create.html.twig', [
