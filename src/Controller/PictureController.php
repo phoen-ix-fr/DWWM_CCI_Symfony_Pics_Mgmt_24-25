@@ -129,6 +129,11 @@ final class PictureController extends AbstractController
 
             // Met à jour les données en base
             $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                "Les modifications ont été enregistrées"
+            );
         }
 
         return $this->render('picture/edit.html.twig', [

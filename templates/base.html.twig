@@ -19,6 +19,12 @@
             <div class="container">
             {% block body %}{% endblock %}
             </div>
+
+            {% for flashtype, messages in app.flashes %}
+                {% for message in messages %}
+                    <twig:BootstrapToast type="{{ flashtype }}" text="{{ message }}" />
+                {% endfor %}
+            {% endfor %}
         </main>
 
         {% include('includes/footer.inc.twig') %}
