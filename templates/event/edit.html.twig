@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edition d'un évènement{% endblock %}
+
+{% block body %}
+<h1>Modifier un évènement ({{ event.id }}) </h1>
+<twig:BootstrapButton type="primary" isOutlined 
+    path="{{ path('app_event') }}" 
+    text="Retourner à la liste" />
+
+{{ form(formEdit) }}
+
+<twig:BootstrapButton type="danger" 
+    path="{{ path('app_event_delete', { id: event.id }) }}" 
+    text="Supprimer" />
+
+{% endblock %}

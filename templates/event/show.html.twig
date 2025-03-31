@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de l'évènement{% endblock %}
+
+{% block body %}
+<h1>Détails évènement ({{ event.id }})</h1>
+<twig:BootstrapButton type="primary" isOutlined path="{{ path('app_event') }}" text="Retourner à la liste" />
+
+<div>
+    <h3>Titre : {{ event.title }}</h3>
+    <h3>Date: {{ event.date|date('d/m/Y') }}</h3>
+</div>
+
+{% endblock %}

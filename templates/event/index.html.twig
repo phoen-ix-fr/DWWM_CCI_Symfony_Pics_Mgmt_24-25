@@ -18,6 +18,16 @@
       title="{{ event.title }}"
       imgSrc=""
     >   
+    <twig:block name="buttons">
+      <twig:BootstrapButton type="primary" 
+        text="Détails" 
+        path="{{ path('app_event_show', { id: event.id }) }}" />
+
+      <twig:BootstrapButton type="warning" isOutlined 
+        text="Modifier" 
+        path="{{ path('app_event_edit', { id: event.id }) }}" />
+
+    </twig:block>  
 
     </twig:BootstrapCard>
   </div>

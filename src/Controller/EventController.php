@@ -80,4 +80,107 @@ final class EventController extends AbstractController
             'event'         => $event
         ]);
     }
+
+    /**
+     * Page  d'affichage des détails d'un évènement
+     * 
+     * @route event/{id}
+     * @name app_event_show
+     * 
+     * @param Event $event Entité Event correspondante à l'ID transmise dans l'URL
+     *
+     * @return Response Réponse HTTP renvoyée au navigateur avec les détails de l'évènement
+     */
+    #[Route('/event/{id<\d+>}', name: 'app_event_show', methods: ['GET'])]
+    public function show(Event $event): Response
+    {
+        return $this->render('event/show.html.twig', [
+            'event'       => $event
+        ]);
+    }
+
+    /**
+     * Page  de modification des détails d'un évènement
+     * 
+     * @route event/edit/{id}
+     * @name app_event_edit
+     * 
+     * @param Event $event Entité Event correspondante à l'ID transmise dans l'URL
+     * @param EntityManagerInterface $entityManager (dépendance) Gestionnaire d'entités
+     * @param Request $request (dépendance) Objet contenant la requête envoyé par le navigateur ($_POST/$_GET)
+     *
+     * @return Response Réponse HTTP renvoyée au navigateur avec le formulaire de modification de l'évènement
+     */
+    #[Route('/event/edit/{id<\d+>}', name: 'app_event_edit', methods: ['GET', 'POST'])]
+    public function edit(Event $event, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        // Création du formulaire pour l'affichage
+        // @param EventType : correspond à la classe du formulaire
+        // @param $event : l'objet qui remplit par défaut le formulaire et qui sera mis à jour
+        $formEventEdit = $this->createForm(EventType::class, $event);
+
+        // On dit au formulaire de récupérer les données de la requête ($_POST)
+        $formEventEdit->handleRequest($request);
+
+        // On vérifie que le formulaire a été soumis et que les données sont valides
+        if($formEventEdit->isSubmitted() && $formEventEdit->isValid())
+        {    
+            // Le persist n'est pas à faire en cas de modification, les données provenant déjà la base
+
+            // Met à jour les données en base
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                "Les modifications ont été enregistrées"
+            );
+        }
+
+        return $this->render('event/edit.html.twig', [
+            'event'         => $event,
+            'formEdit'      => $formEventEdit
+        ]);
+    }
+    /**
+     * Route de suppression d'un évènement
+     * 
+     * @route event/delete/{id}
+     * @name app_event_delete
+     * 
+     * @param Event $event Entité Picture correspondante à l'ID transmise dans l'URL
+     * @param EntityManagerInterface $entityManager (dépendance) Gestionnaire d'entités
+     *
+     * @return Response Réponse HTTP renvoyée au navigateur
+     */
+    #[Route('/event/delete/{id<\d+>}', name: 'app_event_delete')]
+    public function delete(Event $event, EntityManagerInterface $entityManager): Response
+    {
+        try {
+
+            // Prépare l'objet à la suppression
+            $entityManager->remove($event);
+
+            // On lance la suppression en base
+            $entityManager->flush();
+
+            // Si tout s'est bien passé, je redirige vers la liste
+            $this->addFlash(
+                'success',
+                "La suppression a été effectuée"
+            );
+
+            return $this->redirectToRoute('app_event');
+        }
+        catch(\Exception $exc) {
+
+            // Je prépare un flash qui s'affichera à l'écran avec le message d'erreur de l'exception
+            $this->addFlash(
+                'error',
+                $exc->getMessage()
+            );
+
+            // Je redirige vers la page de la photo
+            return $this->redirectToRoute('app_event_show', ['id' => $event->getId()], 304);
+        }
+    }
 }
