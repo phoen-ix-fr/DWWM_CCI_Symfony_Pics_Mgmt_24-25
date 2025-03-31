@@ -15,9 +15,11 @@
     <twig:BootstrapCard
       title="{{ picture.description }}"
       imgSrc="{{ picture.filename }}"
-      btnLink=""
-      btnLabel="Détails"
     >
+    <twig:block name="buttons">
+      <twig:BootstrapButton type="primary" text="Détails" path="{{ path('app_picture_show', { id: picture.id }) }}" />
+      <twig:BootstrapButton type="warning" isOutlined text="Modifier" path="{{ path('app_picture_edit', { id: picture.id }) }}" />
+    </twig:block>     
 
     </twig:BootstrapCard>
   </div>

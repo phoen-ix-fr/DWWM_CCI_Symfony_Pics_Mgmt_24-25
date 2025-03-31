@@ -8,6 +8,6 @@
   <div class="card-body">
     <h5 class="card-title">{{ title }}</h5>
     {% block content %}{% endblock %}
-    <a href="{{ btnLink }}" class="btn btn-primary">{{ btnLabel }}</a>
+    {% block buttons %}{% endblock %}
   </div>
 </div>
