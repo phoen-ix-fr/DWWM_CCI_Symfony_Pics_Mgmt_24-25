@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ajouter une photo{% endblock %}
+{% block title %}Edit une photo{% endblock %}
 
 {% block body %}
-<h1>Ajouter une photo</h1>
+<h1>Modifier une photo ({{ picture.id }}) </h1>
 <twig:BootstrapButton type="primary" path="{{ path('app_picture') }}" text="Retourner à la liste" />
 
-{{ form(formCreate) }}
+{{ form(formEdit) }}
 
 {{ dump(picture) }}
 {% endblock %}

@@ -98,4 +98,42 @@ final class PictureController extends AbstractController
             'picture'       => $picture
         ]);
     }
+
+    /**
+     * Page  de modification des détails d'une photo
+     * 
+     * @route picture/edit/{id}
+     * @name app_picture_edit
+     * 
+     * @param Picture $picture Entité Picture correspondante à l'ID transmise dans l'URL
+     * @param EntityManagerInterface $entityManager (dépendance) Gestionnaire d'entités
+     * @param Request $request (dépendance) Objet contenant la requête envoyé par le navigateur ($_POST/$_GET)
+     *
+     * @return Response Réponse HTTP renvoyée au navigateur avec les détails de la photo
+     */
+    #[Route('/picture/edit/{id<\d+>}', name: 'app_picture_edit')]
+    public function edit(Picture $picture, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        // Création du formulaire pour l'affichage
+        // @param PictureType : correspond à la classe du formulaire
+        // @param $picture : l'objet qui remplit par défaut le formulaire et qui sera mis à jour
+        $formPictureEdit = $this->createForm(PictureType::class, $picture);
+
+        // On dit au formulaire de récupérer les données de la requête ($_POST)
+        $formPictureEdit->handleRequest($request);
+
+        // On vérifie que le formulaire a été soumis et que les données sont valides
+        if($formPictureEdit->isSubmitted() && $formPictureEdit->isValid())
+        {    
+            // Le persist n'est pas à faire en cas de modification, les données provenant déjà la base
+
+            // Met à jour les données en base
+            $entityManager->flush();
+        }
+
+        return $this->render('picture/edit.html.twig', [
+            'picture'       => $picture,
+            'formEdit'      => $formPictureEdit
+        ]);
+    }
 }
