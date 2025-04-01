@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Event;
 use App\Form\EventType;
 use App\Repository\EventRepository;
+use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -128,6 +129,27 @@ final class EventController extends AbstractController
         if($formEventEdit->isSubmitted() && $formEventEdit->isValid())
         {    
             // Le persist n'est pas à faire en cas de modification, les données provenant déjà la base
+            // Cependant, l'entity manager ne surveille que la partie owner, il faudra donc traiter le lien avec les photos
+
+            /** @var PersistentCollection $arrPictures */
+            $arrPictures = $event->getPictures();
+
+            // Je teste si des modifications ont été effectuées au niveau de ma collection
+            if($arrPictures->isDirty()) {
+                $arrPicturesNotAnymore      = $arrPictures->getDeleteDiff();
+                foreach($arrPicturesNotAnymore as $p) 
+                {
+                    // Pour toutes les photos retirées, j'associe NULL à l'évènement de ma photo
+                    $p->setEvent(null);
+                }
+
+                $arrPicturesNewAssociated   = $arrPictures->getInsertDiff();
+                foreach($arrPicturesNewAssociated as $p)
+                {
+                    // Associer l'évènement courant ($event) à la photo
+                    $p->setEvent($event);
+                }                
+            }
 
             // Met à jour les données en base
             $entityManager->flush();
