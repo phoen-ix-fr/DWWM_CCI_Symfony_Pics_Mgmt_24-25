@@ -12,6 +12,13 @@
             {{ nav_link('Tableau de bord', 'app_dashboard') }}
             {{ nav_link('Mes photos', 'app_picture') }}
             {{ nav_link('Mes évènements', 'app_event') }}
+
+            {% if app.user %}
+            {{ nav_link('Se déconnecter', 'app_logout') }}
+            {% else %}
+            {{ nav_link("S'inscrire", 'app_register') }}
+            {{ nav_link('Se connecter', 'app_login') }}
+            {% endif %}
         </ul>
     </div>
     </div>
