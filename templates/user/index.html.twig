@@ -10,9 +10,10 @@
     <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">E-Mail</th>
-            <th scope="col">Prénom</th>
-            <th scope="col">Nom</th>
+            <th>E-Mail</th>
+            <th>Prénom</th>
+            <th>Nom</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -22,6 +23,9 @@
             <td>{{ user.email }}</td>
             <td>{{ user.firstname }}</td>
             <td>{{ user.lastname }}</td>
+            <td>
+                <twig:BootstrapButton path="{{ path('app_user_delete', { id: user.id }) }}" text="Supprimer" type="danger" />
+            </td>
         </tr>
         {% endfor %}
     </tbody>
