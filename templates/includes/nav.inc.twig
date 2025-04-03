@@ -13,6 +13,8 @@
             {{ nav_link('Mes photos', 'app_picture') }}
             {{ nav_link('Mes évènements', 'app_event') }}
 
+            {{ nav_link('Gestion des utilisateurs', 'app_user') }}
+
             {% if app.user %}
             {{ nav_link('Se déconnecter', 'app_logout') }}
             {% else %}
