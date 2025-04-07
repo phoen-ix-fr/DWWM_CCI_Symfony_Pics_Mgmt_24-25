@@ -56,10 +56,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Picture::class, mappedBy: 'createdBy')]
     private Collection $pictures;
 
+    /**
+     * @var Collection<int, Picture>
+     */
+    #[ORM\ManyToMany(targetEntity: Picture::class, mappedBy: 'sharedWith')]
+    private Collection $sharedPictures;
+
     public function __construct()
     {
         $this->events = new ArrayCollection();
         $this->pictures = new ArrayCollection();
+        $this->sharedPictures = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -228,6 +235,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             if ($picture->getCreatedBy() === $this) {
                 $picture->setCreatedBy(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Picture>
+     */
+    public function getSharedPictures(): Collection
+    {
+        return $this->sharedPictures;
+    }
+
+    public function addSharedPicture(Picture $sharedPicture): static
+    {
+        if (!$this->sharedPictures->contains($sharedPicture)) {
+            $this->sharedPictures->add($sharedPicture);
+            $sharedPicture->addSharedWith($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSharedPicture(Picture $sharedPicture): static
+    {
+        if ($this->sharedPictures->removeElement($sharedPicture)) {
+            $sharedPicture->removeSharedWith($this);
         }
 
         return $this;
