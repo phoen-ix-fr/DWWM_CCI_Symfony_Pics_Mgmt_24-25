@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class EventController extends AbstractController
@@ -95,6 +96,7 @@ final class EventController extends AbstractController
      * @return Response Réponse HTTP renvoyée au navigateur avec les détails de l'évènement
      */
     #[Route('/event/{id<\d+>}', name: 'app_event_show', methods: ['GET'])]
+    #[IsGranted('EVENT_SHOW', subject: 'event')]
     public function show(Event $event): Response
     {
         return $this->render('event/show.html.twig', [
@@ -115,6 +117,7 @@ final class EventController extends AbstractController
      * @return Response Réponse HTTP renvoyée au navigateur avec le formulaire de modification de l'évènement
      */
     #[Route('/event/edit/{id<\d+>}', name: 'app_event_edit', methods: ['GET', 'POST'])]
+    #[IsGranted('EVENT_UPDATE', subject: 'event')]
     public function edit(Event $event, Request $request, EntityManagerInterface $entityManager): Response
     {
         // Création du formulaire pour l'affichage
@@ -177,6 +180,7 @@ final class EventController extends AbstractController
      * @return Response Réponse HTTP renvoyée au navigateur
      */
     #[Route('/event/delete/{id<\d+>}', name: 'app_event_delete')]
+    #[IsGranted('EVENT_DELETE', subject: 'event')]
     public function delete(Event $event, EntityManagerInterface $entityManager): Response
     {
         try {

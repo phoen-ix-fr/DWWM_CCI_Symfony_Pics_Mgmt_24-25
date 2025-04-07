@@ -28,6 +28,9 @@ class Event
     #[ORM\OneToMany(targetEntity: Picture::class, mappedBy: 'event')]
     private Collection $pictures;
 
+    #[ORM\ManyToOne(inversedBy: 'events')]
+    private ?User $createdBy = null;
+
     public function __construct()
     {
         $this->pictures = new ArrayCollection();
@@ -88,6 +91,18 @@ class Event
                 $picture->setEvent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreatedBy(): ?User
+    {
+        return $this->createdBy;
+    }
+
+    public function setCreatedBy(?User $createdBy): static
+    {
+        $this->createdBy = $createdBy;
 
         return $this;
     }
