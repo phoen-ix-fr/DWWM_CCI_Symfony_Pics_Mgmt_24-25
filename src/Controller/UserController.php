@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -52,5 +53,26 @@ final class UserController extends AbstractController
             return $this->redirectToRoute('app_user');
         }
 
+    }
+
+    #[Route('/user/roles/{id<\d+>}', name: 'app_user_roles')]
+    public function setRoles(User $user, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        $roles = [];
+
+        if($request->request->get('user-role-modal-'.$user->getId().'-admin'))
+        {
+            $roles[] = 'ROLE_ADMIN';
+        }
+
+        if($request->request->get('user-role-modal-'.$user->getId().'-gest'))
+        {
+            $roles[] = 'ROLE_GEST';
+        }
+
+        $user->setRoles($roles);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_user');
     }
 }
