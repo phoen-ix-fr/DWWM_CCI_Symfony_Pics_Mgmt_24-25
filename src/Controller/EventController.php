@@ -27,9 +27,12 @@ final class EventController extends AbstractController
      * @return Response Réponse HTTP renvoyée au navigateur comportant la liste des évènements
      */   
     #[Route('/event', name: 'app_event')]
-    public function index(EventRepository $eventRepository): Response
+    public function index(EventRepository $eventRepository, ): Response
     {
-        $events = $eventRepository->findAll();
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+
+        $events = $eventRepository->findAllowed($user);
 
         return $this->render('event/index.html.twig', [
             'events'    => $events
