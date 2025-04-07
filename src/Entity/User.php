@@ -50,9 +50,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Event::class, mappedBy: 'createdBy')]
     private Collection $events;
 
+    /**
+     * @var Collection<int, Picture>
+     */
+    #[ORM\OneToMany(targetEntity: Picture::class, mappedBy: 'createdBy')]
+    private Collection $pictures;
+
     public function __construct()
     {
         $this->events = new ArrayCollection();
+        $this->pictures = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -190,6 +197,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($event->getCreatedBy() === $this) {
                 $event->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Picture>
+     */
+    public function getPictures(): Collection
+    {
+        return $this->pictures;
+    }
+
+    public function addPicture(Picture $picture): static
+    {
+        if (!$this->pictures->contains($picture)) {
+            $this->pictures->add($picture);
+            $picture->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removePicture(Picture $picture): static
+    {
+        if ($this->pictures->removeElement($picture)) {
+            // set the owning side to null (unless already changed)
+            if ($picture->getCreatedBy() === $this) {
+                $picture->setCreatedBy(null);
             }
         }
 

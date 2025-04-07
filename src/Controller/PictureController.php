@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
@@ -30,9 +31,11 @@ final class PictureController extends AbstractController
      */   
     #[Route('/picture', name: 'app_picture')]
     public function index(PictureRepository $pictureRepository): Response
-    {
-        //$pictureRepository = $entityManager->getRepository(Picture::class);
-        $pictures = $pictureRepository->findAll();
+    {        
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+
+        $pictures = $pictureRepository->findAllowed($user);
 
         return $this->render('picture/index.html.twig', [
             'pictures'  => $pictures
@@ -92,6 +95,7 @@ final class PictureController extends AbstractController
      * @return Response Réponse HTTP renvoyée au navigateur avec les détails de la photo
      */
     #[Route('/picture/{id<\d+>}', name: 'app_picture_show', methods: ['GET'])]
+    #[IsGranted('PICTURE_SHOW', subject: 'picture')]
     public function show(Picture $picture): Response
     {
         return $this->render('picture/show.html.twig', [
@@ -112,6 +116,7 @@ final class PictureController extends AbstractController
      * @return Response Réponse HTTP renvoyée au navigateur avec les détails de la photo
      */
     #[Route('/picture/edit/{id<\d+>}', name: 'app_picture_edit', methods: ['GET', 'POST'])]
+    #[IsGranted('PICTURE_UPDATE', subject: 'picture')]
     public function edit(Picture $picture, Request $request, EntityManagerInterface $entityManager): Response
     {
         // Création du formulaire pour l'affichage
@@ -154,6 +159,7 @@ final class PictureController extends AbstractController
      * @return Response Réponse HTTP renvoyée au navigateur
      */
     #[Route('/picture/delete/{id<\d+>}', name: 'app_picture_delete')]
+    #[IsGranted('PICTURE_DELETE', subject: 'picture')]
     public function delete(Picture $picture, EntityManagerInterface $entityManager): Response
     {
         try {

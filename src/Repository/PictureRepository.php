@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Picture;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Picture>
@@ -14,6 +15,16 @@ class PictureRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Picture::class);
+    }
+
+    public function findAllowed(User $user): array
+    {
+        // retourne toutes les photos dont l'utilisateur $user a accès
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.createdBy = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
     }
 
     //    /**

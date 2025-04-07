@@ -26,6 +26,9 @@ class Picture
     #[ORM\ManyToOne(inversedBy: 'pictures')]
     private ?Event $event = null;
 
+    #[ORM\ManyToOne(inversedBy: 'pictures')]
+    private ?User $createdBy = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +78,18 @@ class Picture
     public function setEvent(?Event $event): static
     {
         $this->event = $event;
+
+        return $this;
+    }
+
+    public function getCreatedBy(): ?User
+    {
+        return $this->createdBy;
+    }
+
+    public function setCreatedBy(?User $createdBy): static
+    {
+        $this->createdBy = $createdBy;
 
         return $this;
     }
