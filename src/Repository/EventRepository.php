@@ -19,12 +19,17 @@ class EventRepository extends ServiceEntityRepository
 
     public function findAllowed(User $user): array
     {
+        return $this->findAllowedQuery($user)
+            ->getResult();
+    }
+
+    public function findAllowedQuery(User $user)
+    {
         // retourne tous les events dont l'utilisateur $user a accès
         return $this->createQueryBuilder('e')
             ->andWhere('e.createdBy = :user')
             ->setParameter('user', $user)
-            ->getQuery()
-            ->getResult();
+            ->getQuery();
     }
 
     //    /**

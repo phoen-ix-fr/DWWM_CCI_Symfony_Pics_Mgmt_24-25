@@ -7,6 +7,7 @@ use App\Entity\Picture;
 use App\Form\PictureType;
 use App\Repository\PictureRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -30,15 +31,21 @@ final class PictureController extends AbstractController
      * @return Response Réponse HTTP renvoyée au navigateur comportant la liste des photos
      */   
     #[Route('/picture', name: 'app_picture')]
-    public function index(PictureRepository $pictureRepository): Response
+    public function index(PictureRepository $pictureRepository, PaginatorInterface $paginator, Request $request): Response
     {        
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
-        $pictures = $pictureRepository->findAllowed($user);
+        $picturesQuery = $pictureRepository->findAllowedQuery($user);
+
+        $pagination = $paginator->paginate(
+            $picturesQuery, /* query NOT result */
+            $request->query->getInt('page', 1), /* page number */
+            10 /* limit per page */
+        );
 
         return $this->render('picture/index.html.twig', [
-            'pictures'  => $pictures
+            'pagination'  => $pagination
         ]);
     }
 

@@ -17,14 +17,20 @@ class PictureRepository extends ServiceEntityRepository
         parent::__construct($registry, Picture::class);
     }
 
+
     public function findAllowed(User $user): array
     {
-        // retourne toutes les photos dont l'utilisateur $user a accès
+        return $this->findAllowedQuery($user)
+            ->getResult();
+    }
+
+    public function findAllowedQuery(User $user)
+    {
+        // retourne toutes photos dont l'utilisateur $user a accès
         return $this->createQueryBuilder('p')
             ->andWhere('p.createdBy = :user')
             ->setParameter('user', $user)
-            ->getQuery()
-            ->getResult();
+            ->getQuery();
     }
 
     //    /**

@@ -2,6 +2,11 @@
 
 {% block title %}Liste de mes photos{% endblock %}
 
+{% block stylesheets %}
+  {# rel links for pagination #}
+  {{ knp_pagination_rel_links(pagination) }}
+{% endblock %}
+
 {% block body %}
 <h1>Liste de mes photos</h1>
 
@@ -12,7 +17,7 @@
 </div>
 
 <div class="row row-cols-1 row-cols-md-3 g-4">
-  {% for picture in pictures %}
+  {% for picture in pagination %}
   <div class="col mb-4">
     <twig:BootstrapCard
       title="{{ picture.description }}"
@@ -33,6 +38,12 @@
   {% else %}
     <p>Aucune photo n'a été trouvée</p>
   {% endfor %}
+</div>
+
+
+{# display navigation #}
+<div class="navigation">
+    {{ knp_pagination_render(pagination) }}
 </div>
 
 {% endblock %}
