@@ -9,8 +9,9 @@ use App\Entity\Event;
 use App\Entity\Picture;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class PictureFixture extends Fixture
+class PictureFixture extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
@@ -56,5 +57,13 @@ class PictureFixture extends Fixture
         }
 
         $manager->flush();
+    }
+
+    public function getDependencies(): array
+    {
+        return [
+            EventFixture::class,
+            UserFixture::class
+        ];
     }
 }
