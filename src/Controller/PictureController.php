@@ -57,6 +57,9 @@ final class PictureController extends AbstractController
     public function create(EntityManagerInterface $entityManager, 
         Request $request): Response
     {
+        // Récupère l'utlisateur connecté
+        $user = $this->getUser();
+
         // Création d'un nouvel objet
         $picture = new Picture();
 
@@ -71,6 +74,11 @@ final class PictureController extends AbstractController
         // On vérifie que le formulaire a été soumis et que les données sont valides
         if($formPictureCreate->isSubmitted() && $formPictureCreate->isValid())
         {
+            dd($formPictureCreate->get('file'));
+
+            // On définit le créateur à partir de l'utilisateur connecté
+            $picture->setCreatedBy($user);
+
             // Prépare les données à être sauvegardées en base
             $entityManager->persist($picture);
     

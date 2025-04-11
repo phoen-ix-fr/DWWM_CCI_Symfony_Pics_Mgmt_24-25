@@ -8,6 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
@@ -18,6 +19,11 @@ class PictureType extends AbstractType
         $builder
             ->add('filename', TextType::class, [
                 'label' => "Nom du fichier"
+            ])
+
+            ->add('file', FileType::class, [
+                'label' => "Téléverser une image",
+                'mapped' => false
             ])
 
             ->add('date', null, [
