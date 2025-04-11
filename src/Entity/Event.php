@@ -29,6 +29,7 @@ class Event
     private Collection $pictures;
 
     #[ORM\ManyToOne(inversedBy: 'events')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?User $createdBy = null;
 
     public function __construct()

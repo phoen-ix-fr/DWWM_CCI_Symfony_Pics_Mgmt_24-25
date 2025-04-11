@@ -28,7 +28,8 @@ class Picture
     #[ORM\ManyToOne(inversedBy: 'pictures')]
     private ?Event $event = null;
 
-    #[ORM\ManyToOne(inversedBy: 'pictures')]
+    #[ORM\ManyToOne(inversedBy: 'pictures', cascade: 'persist')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?User $createdBy = null;
 
     /**
